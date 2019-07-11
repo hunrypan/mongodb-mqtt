@@ -1,0 +1,150 @@
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<head>
+<title>Drank Station</title>
+<style>
+#app1{
+        width: 500;
+        height: 500;
+    position: absolute;
+    left: 250;
+    top: 10;    
+}
+
+#app2{
+       width: 200;
+       height: 100;
+        position: absolute;
+        left: 10;
+        top: 10;
+}
+
+
+</style>
+</head>
+
+<body>
+
+  <div id ="app2">
+                <ol>
+                                <li v-for="item in items"   v-on:click="theid = item.Equipment_Identifier;  show();">
+                                  {{ item.Equipment_Identifier}}
+                                </li>
+                </ol>
+  </div>      
+
+<div id="app1" v-if="seen">
+<p>Trading Partner Name : {{Trading_Partner_Name}}</p>
+<p> Transaction ID : {{Transaction_ID}} </p>
+<p>Primary Telemetry ID: {{Primary_Telemetry_ID}}</p>
+<p>Equipment Identifier:{{Equipment_Identifier}}</p>
+<p>Date Of Transaction:{{Date_Of_Transaction}}</p>
+<p>Product UPC Code:{{Product_UPC_Code}}</p>
+<p>Product Quantity:{{Product_Quantity}}</p>
+<p>Syrup1 Used:{{Syrup_1_Used}}</p>
+<p>Syrup2 Used:{{Syrup_2_Used}}</p>
+<p>Syrup3 Used:{{Syrup_3_Used}}</p>
+<p>Syrup4 Used:{{Syrup_4_Used}}</p>
+<p> Syrup1 Remaining:{{ Syrup_1_Remaining}}</p>
+<p> Syrup2 Remaining:{{ Syrup_2_Remaining}}</p>
+<p> Syrup3 Remaining:{{ Syrup_3_Remaining}}</p>
+<p> Syrup4 Remaining:{{ Syrup_4_Remaining}}</p>
+<p>Chiller Bucket Actual Temp:{{Chiller_Bucket_Actual_Temp}}</p>
+<p> Hot Tank Actual Temp:{{ Hot_Tank_Actual_Temp}}</p> 
+</div>
+
+
+<script>
+
+var theid = "";
+
+   var socket = io();
+
+
+function show()
+{
+        console.log(theid + "aha");
+
+socket.emit("loadmachine",theid);
+}
+
+
+   var app2 = new Vue({
+  el: '#app2',
+  data: {
+    items: [
+      
+    ]
+  }
+})
+
+        var app1 = new Vue({
+                el: '#app1',
+                data: {
+                        seen : false,
+
+                        Trading_Partner_Name:"",
+                        Transaction_ID:"",
+                        Primary_Telemetry_ID:"",
+                        Equipment_Identifier:"",
+                        Date_Of_Transaction:"",
+                        Product_UPC_Code:"",
+                        Product_Quantity:"",
+                        Syrup_1_Used:"",
+                        Syrup_2_Used:"",
+                       Syrup_3_Used:"",
+                       Syrup_4_Used:"",
+                       Syrup_1_Remaining:"",
+                       Syrup_2_Remaining:"",
+                       Syrup_3_Remaining:"",
+                       Syrup_4_Remaining:"",
+                       Chiller_Bucket_Actual_Temp:"",
+                       Hot_Tank_Actual_Temp:""
+                },
+                created: function(){
+            socket.emit("usemqtt","aha1");
+             socket.emit("loadlist","aha");
+            }
+              });
+        
+        
+        $(function () {
+
+        socket.on('listinfo',function(msg){
+                app2.items = msg;
+        });
+
+
+        socket.on('waterinfo', function(msg){
+        
+          if (theid ==  msg. Equipment_Identifier)
+          {
+
+        app1.seen = true;
+                        app1.Trading_Partner_Name = msg.Trading_Partner_Name;
+                        app1.Transaction_ID  =   msg. Transaction_ID;
+                        app1.Primary_Telemetry_ID = msg.Primary_Telemetry_ID;
+                        app1.Equipment_Identifier = msg.Equipment_Identifier;
+                        app1.Date_Of_Transaction = msg.Date_Of_Transaction;
+                        app1.Product_UPC_Code = msg.Product_UPC_Code;
+                        app1.Product_Quantity = msg.Product_Quantity;
+                        app1.Syrup_1_Used = msg.Syrup_1_Used;
+                        app1.Syrup_2_Used = msg.Syrup_2_Used;
+                        app1.Syrup_3_Used = msg.Syrup_3_Used;
+                        app1.Syrup_4_Used = msg.Syrup_4_Used;
+                        app1.Syrup_1_Remaining = msg.Syrup_1_Remaining;
+                        app1.Syrup_2_Remaining = msg.Syrup_2_Remaining;
+                        app1.Syrup_3_Remaining = msg.Syrup_3_Remaining;
+                        app1.Syrup_4_Remaining = msg.Syrup_4_Remaining;
+                        app1.Chiller_Bucket_Actual_Temp = msg.Chiller_Bucket_Actual_Temp;
+                        app1.Hot_Tank_Actual_Temp = msg.Hot_Tank_Actual_Temp;
+        }
+        
+        })
+    })
+        </script>
+
+</body>
+</html>
