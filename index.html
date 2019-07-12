@@ -15,13 +15,43 @@
 
 #app2{
        width: 200;
-       height: 100;
+       height: 300;
+       padding: 4px;
+       border-right: 2px solid ;
+
+
         position: absolute;
         left: 10;
         top: 10;
+      
 }
 
 
+li {
+        padding: 4px;
+        cursor: pointer; 
+}
+
+.show1 {
+      background-color: green;
+}
+
+.show2 {
+      background-color: greenyellow;
+}
+
+
+.show3 {
+      background-color: yellow;
+}
+
+.show4 {
+      background-color:orange;
+}
+
+.show5 {
+      background-color: red;
+}
 </style>
 </head>
 
@@ -29,7 +59,7 @@
 
   <div id ="app2">
                 <ol>
-                                <li v-for="item in items"   v-on:click="theid = item.Equipment_Identifier;  show();">
+                                <li v-for="item in items"   v-on:click="theid = item.Equipment_Identifier;  show();"   v-bind:class="[ color1,(item.Syrup_1_Used  >  3) ? color2:'' ,(item.Syrup_1_Used  >  6) ? color3:'', (item.Syrup_1_Used  > 9)  ?  color4 : '', (item.Syrup_1_Used ==12)  ?  color5 : ''  ]">
                                   {{ item.Equipment_Identifier}}
                                 </li>
                 </ol>
@@ -74,6 +104,12 @@ socket.emit("loadmachine",theid);
    var app2 = new Vue({
   el: '#app2',
   data: {
+        color1:'show1',
+        color2:'show2',
+        color3:'show3',
+        color4:'show4',
+        color5:'show5',
+
     items: [
       
     ]

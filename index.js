@@ -16,34 +16,6 @@ var io = require('socket.io')(http);
 var  __dirname = "/home/pan/www1/wind3/";
 
 
-function usemqtt(userid)
-{
-
- console.log("aha function load");   
-var options = {port:2000,clientId:userid};
-
-var client  = mqtt.connect('mqtt://www.windcoffee.club',options);
-
-client.on('connect', function () {
-
-    client.subscribe('DrankStation', function (err) {
-        if (!err) {
-      console.log("mqtt sub DrankStation ok");
-      }else {
-      console.log("mqtt sub DrankStation "  + console.error());
-      }
-      });
-})
-
-client.on('message', function (topic, message) {  
-  if (topic == "DrankStation")
-  {
-    console.log(message.toString());
-    getinfo(message.toString());
-  }
-} )
-}
-
 
 function getinfo(info)
 {
@@ -126,14 +98,7 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   console.log('a user connected');
-
-  socket.on('usemqtt', function(msg){
-    console.log('usemqtt: ' + msg);
-    usemqtt(msg);
-  });
-
-
-
+  
   socket.on('loadmachine',function(msg){
   console.log("load machine " + msg);
   MongoClient.connect(url, function(err, db) {
@@ -169,3 +134,27 @@ socket.on('loadlist',function(msg){
 http.listen(80, function(){
   console.log('listening on *:80');
 });
+
+
+var options = {port:2000,clientId:"DrankStationADMIN"};
+
+var client  = mqtt.connect('mqtt://www.windcoffee.club',options);
+
+client.on('connect', function () {
+
+    client.subscribe('DrankStation', function (err) {
+        if (!err) {
+      console.log("mqtt sub DrankStation ok");
+      }else {
+      console.log("mqtt sub DrankStation "  + console.error());
+      }
+      });
+})
+
+client.on('message', function (topic, message) {  
+  if (topic == "DrankStation")
+  {
+    console.log(message.toString());
+    getinfo(message.toString());
+  }
+} )
