@@ -96,6 +96,21 @@ app.get('/', function(req, res){
   
 });
 
+
+app.get('/mapinfo', function(req, res){
+  res.setHeader('Content-Type', 'application/json');
+  //res.end(JSON.stringify({ a: 1 }));
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    var dbo = db.db("drankstation"); 
+    dbo.collection("mapinfo").find({}).toArray(function(err, result) {
+      if (err) throw err;
+      res.end(JSON.stringify(result));
+      db.close();
+    })
+  })
+});
+
 io.on('connection', function(socket){
   console.log('a user connected');
   
@@ -149,6 +164,14 @@ client.on('connect', function () {
       console.log("mqtt sub DrankStation "  + console.error());
       }
       });
+
+      client.subscribe('mapinfo', function (err) {
+        if (!err) {
+      console.log("mqtt sub mapinfo ok");
+      }else {
+      console.log("mqtt sub mapinfo "  + console.error());
+      }
+      });
 })
 
 client.on('message', function (topic, message) {  
@@ -156,5 +179,27 @@ client.on('message', function (topic, message) {
   {
     console.log(message.toString());
     getinfo(message.toString());
+  }
+
+  if (topic == "mapinfo")
+  {
+    var  theinfo = message.toString();
+    console.log(theinfo);
+
+    MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+
+      var theobj = JSON.parse(theinfo);
+
+      var query = {DS_id:theobj.DS_id};
+      var dbo = db.db("drankstation"); 
+    
+      var newvalues = { $set: theobj };
+      dbo.collection("mapinfo").updateOne(query, newvalues, {upsert: true, safe: false},function(err, res) {
+        if (err) throw err;
+        console.log("1 mapinfo updated");
+        db.close();
+      })
+    })
   }
 } )
