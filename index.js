@@ -96,10 +96,29 @@ app.get('/', function(req, res){
   
 });
 
+app.get('/drinkstation.png', function(req, res){
+  res.sendFile(__dirname + '/drinkstation.png');
+});
+
+
+app.get('/drink_used1.png', function(req, res){
+  res.sendFile(__dirname + '/drink_used1.png');
+});
+
+app.get('/drink_used2.png', function(req, res){
+  res.sendFile(__dirname + '/drink_used2.png');
+});
+
+app.get('/drink_used3.png', function(req, res){
+  res.sendFile(__dirname + '/drink_used3.png');
+});
+
+app.get('/warn1.png', function(req, res){
+  res.sendFile(__dirname + '/warn1.png');
+});
 
 app.get('/mapinfo', function(req, res){
   res.setHeader('Content-Type', 'application/json');
-  //res.end(JSON.stringify({ a: 1 }));
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     var dbo = db.db("drankstation"); 

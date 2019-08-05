@@ -5,6 +5,68 @@
 <head>
 <title>Drank Station</title>
 <style>
+
+#dsimg  {
+      width: 290;
+      height: 245;
+}
+
+#usedimgs {
+      width: 90;
+      height: 180;
+      border: 2px,solid; 
+      position: absolute;
+        left: 90;
+        top: 50;
+}
+
+#usedimgs  img{
+      width: 25;
+      height: 75;
+}
+
+#usedimgs  svg{
+      position: absolute;
+      left: 5;
+      top: 24;
+}
+
+#used1 {
+      position: absolute;
+      left: 0;
+      top:0;
+}
+
+#used2 {
+      position: absolute;
+      left: 30;
+      top:0;
+}
+
+#used3 {
+      position: absolute;
+      left: 60;
+      top:0;
+}
+
+#used4 {
+      position: absolute;
+      left: 0;
+      top:80;
+}
+
+#used5 {
+      position: absolute;
+      left: 30;
+      top:80;
+}
+
+#used6 {
+      position: absolute;
+      left: 60;
+      top:80;
+}
+
 #app1{
         width: 500;
         height: 500;
@@ -18,8 +80,6 @@
        height: 300;
        padding: 4px;
        border-right: 2px solid ;
-
-
         position: absolute;
         left: 10;
         top: 10;
@@ -66,6 +126,54 @@ li {
   </div>      
 
 <div id="app1" v-if="seen">
+
+      <div id = "dsimgs">
+                  <img  id="dsimg" src="drinkstation.png"/>
+      <div id = "usedimgs">
+            <div id="used1">
+            <img   src="drink_used1.png"/>
+            <svg width="15" height="44">    
+                        <rect  id ="rect1"  x= "0"   y="0"   width="15"  height="0" style="fill:rgb(143,170,220)"/>
+                  </svg>
+             </div>
+
+       <div id="used2">
+                  <img   src="drink_used2.png"/>
+                   <svg width="15" height="44">
+                              <rect  id ="rect2"  width="15"  height="0" style="fill:rgb(244,177,131)"/>                
+                   </svg>
+      </div>
+
+      <div id="used3">
+                  <img   src="drink_used3.png"/>
+                   <svg width="15" height="44">
+                              <rect  id ="rect3"  width="15"  height="0" style="fill:rgb(255,217,102)"/>                     
+                   </svg>
+      </div>
+
+      <div id="used4">
+                  <img   src="drink_used1.png"/>
+                   <svg width="15" height="44">
+                              <rect  id ="rect4"  width="15"  height="0" style="fill:rgb(143,170,220)"/>                      
+                   </svg>
+       </div>
+
+       <div id="used5">
+                  <img   src="drink_used2.png"/>
+                   <svg width="15" height="44">
+                        <rect  id ="rect5"  width="15"  height="0" style="fill:rgb(244,177,131)"/>                       
+                   </svg>
+       </div>
+
+       <div id="used6">
+                  <img   src="drink_used3.png"/>
+                   <svg width="15" height="44">
+                        <rect  id ="rect6"  width="15"  height="0" style="fill:rgb(255,217,102)"/>                  
+                   </svg>
+       </div>
+      </div>
+      </div>
+      
 <p>Trading Partner Name : {{Trading_Partner_Name}}</p>
 <p> Transaction ID : {{Transaction_ID}} </p>
 <p>Primary Telemetry ID: {{Primary_Telemetry_ID}}</p>
@@ -176,10 +284,25 @@ socket.emit("loadmachine",theid);
                         app1.Syrup_4_Remaining = msg.Syrup_4_Remaining;
                         app1.Chiller_Bucket_Actual_Temp = msg.Chiller_Bucket_Actual_Temp;
                         app1.Hot_Tank_Actual_Temp = msg.Hot_Tank_Actual_Temp;
+
+                    
+                        var v1 =  Math.floor(parseInt(app1.Syrup_1_Used)/12*44);
+                        var v2 =  Math.floor(parseInt(app1.Syrup_2_Used)/12*44);
+                        var v3 =  Math.floor( parseInt(app1.Syrup_3_Used)/12*44);
+                        var v4 =  Math.floor(parseInt(app1.Syrup_4_Used)/12*44);
+                        document.getElementById("rect1").setAttribute("y", v1);
+                        document.getElementById("rect1").setAttribute("height", (44-v1));
+                        document.getElementById("rect2").setAttribute("y", v2);
+                        document.getElementById("rect2").setAttribute("height", (44-v2));
+                        document.getElementById("rect3").setAttribute("y", v3);
+                        document.getElementById("rect3").setAttribute("height", (44-v3));
+                        document.getElementById("rect4").setAttribute("y", v4);
+                        document.getElementById("rect4").setAttribute("height", (44-v4));
         }
         
         })
     })
+
         </script>
 
 </body>
