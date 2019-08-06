@@ -162,6 +162,19 @@ socket.on('loadlist',function(msg){
   }) 
 })
 
+socket.on('loadmapinfo',function(msg){
+  console.log("load mapinfo");
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    var dbo = db.db("drankstation"); 
+    dbo.collection("mapinfo").find({}).toArray(function(err, result) {
+      if (err) throw err;
+      io.emit("mapinfo",result);
+      db.close();
+    })
+  })
+})
+
 });
 
 

@@ -2,6 +2,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=47b92d5661e2b59965a8d1491349670e"></script>
 <head>
 <title>Drank Station</title>
 <style>
@@ -75,6 +76,15 @@
     top: 10;    
 }
 
+#map{
+      width: 500;
+        height: 500;
+    position: absolute;
+    left: 250;
+    top: 10;      
+}
+
+
 #app2{
        width: 200;
        height: 300;
@@ -86,6 +96,11 @@
       
 }
 
+
+#maptopic{
+      padding: 4px;
+        cursor: pointer; 
+}
 
 li {
         padding: 4px;
@@ -117,7 +132,9 @@ li {
 
 <body>
 
+   <div id="map" v-if="seenmap"></div>
   <div id ="app2">
+            <div id="maptopic" v-on:click="showmap();">MAP</div>   
                 <ol>
                                 <li v-for="item in items"   v-on:click="theid = item.Equipment_Identifier;  show();"   v-bind:class="[ color1,(item.Syrup_1_Used  >  3) ? color2:'' ,(item.Syrup_1_Used  >  6) ? color3:'', (item.Syrup_1_Used  > 9)  ?  color4 : '', (item.Syrup_1_Used ==12)  ?  color5 : ''  ]">
                                   {{ item.Equipment_Identifier}}
@@ -203,6 +220,8 @@ var theid = "";
 
 function show()
 {
+      app3.seenmap = false;
+        app1.seen = true;
         console.log(theid + "aha");
 
 socket.emit("loadmachine",theid);
@@ -224,11 +243,17 @@ socket.emit("loadmachine",theid);
   }
 })
 
+var app3 = new Vue({
+  el: '#map',
+  data: {
+        seenmap:false,
+  }
+})
+
         var app1 = new Vue({
                 el: '#app1',
                 data: {
                         seen : false,
-
                         Trading_Partner_Name:"",
                         Transaction_ID:"",
                         Primary_Telemetry_ID:"",
@@ -261,12 +286,16 @@ socket.emit("loadmachine",theid);
         });
 
 
+        socket.on('mapinfo',function(msg){
+                console.log(msg);
+        });
+
         socket.on('waterinfo', function(msg){
         
           if (theid ==  msg. Equipment_Identifier)
           {
-
-        app1.seen = true;
+       // app3.seenmap = false;
+       // app1.seen = true;
                         app1.Trading_Partner_Name = msg.Trading_Partner_Name;
                         app1.Transaction_ID  =   msg. Transaction_ID;
                         app1.Primary_Telemetry_ID = msg.Primary_Telemetry_ID;
@@ -303,6 +332,22 @@ socket.emit("loadmachine",theid);
         })
     })
 
+function showmap()
+{
+      app1.seen = false;
+     app3.seenmap = true;
+     setTimeout(function() {
+      var map = new AMap.Map('map', {
+       center:[117.000923,36.675807],
+       zoom:11
+});
+socket.emit("loadmapinfo","aha");
+}, 100);
+
+
+
+     
+}
         </script>
 
 </body>
