@@ -215,6 +215,8 @@ li {
 
 var theid = "";
 
+var map;
+
    var socket = io();
 
 
@@ -287,7 +289,27 @@ var app3 = new Vue({
 
 
         socket.on('mapinfo',function(msg){
-                console.log(msg);
+            
+var msg = [{DS_id: "Drink Station",_id: "5d43af0a7fc55b074b15dbaf",info: "4 floor",la: "22.788667559706877",ln: "113.908220682871"}];
+            
+
+
+              for (var point in msg)
+              {
+
+                  var la = parseFloat( msg[point].la);
+                  var ln = parseFloat( msg[point].ln);
+                  var info = msg[point].info;
+                  var dsid = msg[point].DS_id;
+                  if (point == 0)
+                  {
+                        map.setZoomAndCenter(14, [ln,la]);
+                  }
+                    
+                  var marker = new AMap.Marker({position: new AMap.LngLat(ln,la), title: dsid + "\n" + info});
+                  map.add(marker);
+              }
+                
         });
 
         socket.on('waterinfo', function(msg){
@@ -337,7 +359,7 @@ function showmap()
       app1.seen = false;
      app3.seenmap = true;
      setTimeout(function() {
-      var map = new AMap.Map('map', {
+      map = new AMap.Map('map', {
        center:[117.000923,36.675807],
        zoom:11
 });
