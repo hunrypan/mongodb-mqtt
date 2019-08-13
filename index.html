@@ -12,6 +12,19 @@
       height: 245;
 }
 
+#av_water {
+      width: 40;
+      height: 60;
+      position: absolute;
+      left:24 ;
+      top: 80;
+}
+
+#av_water img {
+      width: 40;
+      height: 60;
+}
+
 #usedimgs {
       width: 90;
       height: 180;
@@ -127,6 +140,14 @@ li {
 .show5 {
       background-color: red;
 }
+
+.av1-enter-active, .av1-leave-active {
+  transition: opacity .5s;
+}
+.av1-enter, .av1-leave-to  {
+  opacity: 0;
+}
+
 </style>
 </head>
 
@@ -146,6 +167,16 @@ li {
 
       <div id = "dsimgs">
                   <img  id="dsimg" src="drinkstation.png"/>
+
+                  <transition name="av1">
+                  <div  id = "av_water" v-if="showav1" >
+                        <img src="dropwater.png"/>
+                 </div>      
+            </transition> 
+
+                  <div id = "av_cup">
+                        <img src=""/>
+                  </div>      
       <div id = "usedimgs">
             <div id="used1">
             <img   src="drink_used1.png"/>
@@ -255,6 +286,7 @@ var app3 = new Vue({
         var app1 = new Vue({
                 el: '#app1',
                 data: {
+                  showav1:false,
                         seen : false,
                         Trading_Partner_Name:"",
                         Transaction_ID:"",
@@ -318,6 +350,9 @@ var msg = [{DS_id: "Drink Station",_id: "5d43af0a7fc55b074b15dbaf",info: "4 floo
           {
        // app3.seenmap = false;
        // app1.seen = true;
+       app1.showav1 = true;
+       setTimeout(function() { app1.showav1 = false;  }, 1000);
+
                         app1.Trading_Partner_Name = msg.Trading_Partner_Name;
                         app1.Transaction_ID  =   msg. Transaction_ID;
                         app1.Primary_Telemetry_ID = msg.Primary_Telemetry_ID;
