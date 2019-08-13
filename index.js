@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var http = require('http'),fs = require('fs');
 var mqtt = require('mqtt');
+var URL = require('url');
+
 
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
@@ -96,26 +98,11 @@ app.get('/', function(req, res){
   
 });
 
-app.get('/drinkstation.png', function(req, res){
-  res.sendFile(__dirname + '/drinkstation.png');
-});
-
-
-app.get('/drink_used1.png', function(req, res){
-  res.sendFile(__dirname + '/drink_used1.png');
-});
-
-app.get('/drink_used2.png', function(req, res){
-  res.sendFile(__dirname + '/drink_used2.png');
-});
-
-app.get('/drink_used3.png', function(req, res){
-  res.sendFile(__dirname + '/drink_used3.png');
-});
-
-app.get('/warn1.png', function(req, res){
-  res.sendFile(__dirname + '/warn1.png');
-});
+app.get('/*.png', function (req, res) {
+  var url_parts = URL.parse(req.url);
+  var thepath = url_parts.pathname;
+  res.sendFile(__dirname + '/' + thepath);
+})
 
 app.get('/mapinfo', function(req, res){
   res.setHeader('Content-Type', 'application/json');
@@ -141,7 +128,7 @@ io.on('connection', function(socket){
     var dbo = db.db("drankstation"); 
     dbo.collection("machine").findOne(query,function(err, result) {
       if (err) throw err;
-      io.emit("waterinfo",result);
+      io.emit("waterinfo2",result);
       db.close();
     })
   })

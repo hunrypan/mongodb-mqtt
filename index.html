@@ -350,9 +350,49 @@ var msg = [{DS_id: "Drink Station",_id: "5d43af0a7fc55b074b15dbaf",info: "4 floo
                         document.getElementById("rect4").setAttribute("y", v4);
                         document.getElementById("rect4").setAttribute("height", (44-v4));
         }
+      });
+       
+      socket.on('waterinfo2', function(msg){
         
+        if (theid ==  msg. Equipment_Identifier)
+        {
+     // app3.seenmap = false;
+     // app1.seen = true;
+                      app1.Trading_Partner_Name = msg.Trading_Partner_Name;
+                      app1.Transaction_ID  =   msg. Transaction_ID;
+                      app1.Primary_Telemetry_ID = msg.Primary_Telemetry_ID;
+                      app1.Equipment_Identifier = msg.Equipment_Identifier;
+                      app1.Date_Of_Transaction = msg.Date_Of_Transaction;
+                      app1.Product_UPC_Code = msg.Product_UPC_Code;
+                      app1.Product_Quantity = msg.Product_Quantity;
+                      app1.Syrup_1_Used = msg.Syrup_1_Used;
+                      app1.Syrup_2_Used = msg.Syrup_2_Used;
+                      app1.Syrup_3_Used = msg.Syrup_3_Used;
+                      app1.Syrup_4_Used = msg.Syrup_4_Used;
+                      app1.Syrup_1_Remaining = msg.Syrup_1_Remaining;
+                      app1.Syrup_2_Remaining = msg.Syrup_2_Remaining;
+                      app1.Syrup_3_Remaining = msg.Syrup_3_Remaining;
+                      app1.Syrup_4_Remaining = msg.Syrup_4_Remaining;
+                      app1.Chiller_Bucket_Actual_Temp = msg.Chiller_Bucket_Actual_Temp;
+                      app1.Hot_Tank_Actual_Temp = msg.Hot_Tank_Actual_Temp;
+
+                  
+                      var v1 =  Math.floor(parseInt(app1.Syrup_1_Used)/12*44);
+                      var v2 =  Math.floor(parseInt(app1.Syrup_2_Used)/12*44);
+                      var v3 =  Math.floor( parseInt(app1.Syrup_3_Used)/12*44);
+                      var v4 =  Math.floor(parseInt(app1.Syrup_4_Used)/12*44);
+                      document.getElementById("rect1").setAttribute("y", v1);
+                      document.getElementById("rect1").setAttribute("height", (44-v1));
+                      document.getElementById("rect2").setAttribute("y", v2);
+                      document.getElementById("rect2").setAttribute("height", (44-v2));
+                      document.getElementById("rect3").setAttribute("y", v3);
+                      document.getElementById("rect3").setAttribute("height", (44-v3));
+                      document.getElementById("rect4").setAttribute("y", v4);
+                      document.getElementById("rect4").setAttribute("height", (44-v4));
+      }
         })
-    })
+
+      })
 
 function showmap()
 {
