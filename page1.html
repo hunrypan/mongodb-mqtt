@@ -1,0 +1,73 @@
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<head>
+        <title>Drink Station</title>
+</head>
+
+<body>
+<style>
+
+        #fullpage  {
+            width: 400;
+            transform-origin: 0 0;
+            background-color: blueviolet;
+            
+        }
+.bt  {
+        display: flex;
+  justify-content: center;
+  padding: 4;
+}
+
+.bt button{
+    background-image: url ('./dropwater.png') ;
+    cursor: grab; 
+}
+
+
+</style>
+
+<div id= "fullpage" v-bind:style= "{ transform: zoom}" > 
+<div id = "list">
+ 
+     <div   class="bt"  v-for="item in items"   v-on:click="show();" >
+            
+            <a class="btitem" :href="item.MID">{{ item.MID}}</a>
+     </div>
+
+</div>
+</div>
+
+<script>
+var socket = io();
+var win_h = $(window).height();   // returns height of browser viewport
+var doc_h = $(document).height(); // returns height of HTML document (same as pageHeight in screenshot)
+var win_w = $(window).width();   // returns width of browser viewport
+var doc_w = $(document).width();
+var zoomscale = win_w/400; 
+
+$(function () {
+    socket.on('listinfo',function(msg){
+        console.log(msg);
+            app.items = msg;
+    });
+})
+
+    var app = new Vue({
+                el: '#fullpage',
+                data: {
+        zoom: 'scale(' + zoomscale +')',
+        items: []
+        },
+        created: function(){
+             socket.emit("loadlist","aha");
+            }
+});
+</script>
+
+
+
+</body>
+</html>

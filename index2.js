@@ -18,6 +18,7 @@ var io = require('socket.io')(http);
 var  __dirname = "/home/pan/www1/wind3/";
 
 
+
 function getinfo(info)
 {
 
@@ -77,13 +78,13 @@ var theobj = {
      "S4":S4
 }
 
-console.log(theobj.MID);
+console.log(theobj.toString);
 
 io.emit("waterinfo",theobj);
  
 MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
-    var query = {MID:theobj.MID};
+    var query = {Transaction_ID:theobj.Transaction_ID};
     var dbo = db.db("drankstation"); 
   
     var newvalues = { $set: theobj };
@@ -97,16 +98,18 @@ MongoClient.connect(url, function(err, db) {
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     var dbo = db.db("drankstation");
-    dbo.collection("machine").find({},{projection:{MID:1,U1:2}}).toArray(function(err, result)  {
+    dbo.collection("machine").find({},{projection:{Equipment_Identifier:1,Syrup_1_Used:2}}).toArray(function(err, result)  {
       if (err) throw err;
       io.emit("listinfo",result);
       db.close();
     })
   }) 
+  
 }
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
+  
 });
 
 app.get('/*.html', function (req, res) {
@@ -120,12 +123,6 @@ app.get('/*.png', function (req, res) {
   var thepath = url_parts.pathname;
   res.sendFile(__dirname + '/' + thepath);
 })
-
-app.get('/DC07A*',function(req,res){
-  res.sendFile(__dirname + '/page2.html');
-})
-
-
 
 app.get('/mapinfo', function(req, res){
   res.setHeader('Content-Type', 'application/json');
@@ -175,11 +172,13 @@ app.get('/saveorder',function(req, res) {
 
 
 io.on('connection', function(socket){
+  console.log('a user connected');
+  
   socket.on('loadmachine',function(msg){
   console.log("load machine " + msg);
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
-    var query = {"MID":msg};
+    var query = {"Equipment_Identifier":msg};
     var dbo = db.db("drankstation"); 
     dbo.collection("machine").findOne(query,function(err, result) {
       if (err) throw err;
@@ -196,7 +195,7 @@ socket.on('loadlist',function(msg){
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     var dbo = db.db("drankstation");
-    dbo.collection("machine").find({},{projection:{MID:1,U1:2}}).toArray(function(err, result)  {
+    dbo.collection("machine").find({},{projection:{Equipment_Identifier:1,Syrup_1_Used:2}}).toArray(function(err, result)  {
       if (err) throw err;
       io.emit("listinfo",result);
       db.close();

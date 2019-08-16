@@ -1,0 +1,45 @@
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <head>
+        <style>
+        #apple{
+    
+            transform-origin: 0 0;
+            width: 400;
+            background-color: blueviolet;
+        }
+
+        #dfee{
+            transform: scale(2);
+        }
+        </style>
+    </head>
+<title>Drink Station</title>
+<body>
+<div id="aha" >
+<div  id="apple"  v-bind:style= "{ transform: zoom}">test123</div>
+</div>
+<script>
+var win_h = $(window).height();   // returns height of browser viewport
+var doc_h = $(document).height(); // returns height of HTML document (same as pageHeight in screenshot)
+var win_w = $(window).width();   // returns width of browser viewport
+var doc_w = $(document).width();
+var zoomscale = win_w/700; 
+
+var app = new Vue({
+                el: '#aha',
+                data: {
+  zoom: 'scale(' + zoomscale +')',
+  items: []
+  },
+  created: function(){
+            socket.emit("usemqtt","aha1");
+             socket.emit("loadlist","aha");
+            }    
+});
+
+</script>
+</body>
+</html>

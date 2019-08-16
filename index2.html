@@ -4,14 +4,8 @@
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="https://webapi.amap.com/maps?v=1.4.15&key=47b92d5661e2b59965a8d1491349670e"></script>
 <head>
-           
-<title>Drink Station</title>
+<title>Drank Station</title>
 <style>
-
-#fullpage  {
-    width: 700;
-    transform-origin: 0 0;
-}
 
 #dsimg  {
       width: 290;
@@ -176,7 +170,7 @@ li {
 </head>
 
 <body>
-<div id= "fullpage"   v-bind:style= "{ transform: zoom}">
+
    <div id="map" v-if="seenmap"></div>
   <div id ="app2">
             <div id="maptopic" v-on:click="showmap();">MAP</div>   
@@ -266,7 +260,7 @@ li {
 <p>Chiller Bucket Actual Temp:{{Chiller_Bucket_Actual_Temp}}</p>
 <p> Hot Tank Actual Temp:{{ Hot_Tank_Actual_Temp}}</p> 
 </div>
-</div>
+
 <script>
 
 var theid = "";
@@ -278,15 +272,70 @@ var map;
 
 function show()
 {
-      app4.seenmap = false;
-      app4.seen = true;
-      console.log(theid + "aha");
-      socket.emit("loadmachine",theid);
-}        
+      app3.seenmap = false;
+        app1.seen = true;
+        console.log(theid + "aha");
+
+socket.emit("loadmachine",theid);
+}
+
+
+   var app2 = new Vue({
+  el: '#app2',
+  data: {
+        color1:'show1',
+        color2:'show2',
+        color3:'show3',
+        color4:'show4',
+        color5:'show5',
+
+    items: [
+      
+    ]
+  }
+})
+
+var app3 = new Vue({
+  el: '#map',
+  data: {
+        seenmap:false,
+  }
+})
+
+        var app1 = new Vue({
+                el: '#app1',
+                data: {
+                  showav1:false,
+                        seen : false,
+                        Trading_Partner_Name:"",
+                        Transaction_ID:"",
+                        Primary_Telemetry_ID:"",
+                        Equipment_Identifier:"",
+                        Date_Of_Transaction:"",
+                        Product_UPC_Code:"",
+                        Product_Quantity:"",
+                        Syrup_1_Used:"",
+                        Syrup_2_Used:"",
+                       Syrup_3_Used:"",
+                       Syrup_4_Used:"",
+                       Syrup_1_Remaining:"",
+                       Syrup_2_Remaining:"",
+                       Syrup_3_Remaining:"",
+                       Syrup_4_Remaining:"",
+                       Chiller_Bucket_Actual_Temp:"",
+                       Hot_Tank_Actual_Temp:""
+                },
+                created: function(){
+            socket.emit("usemqtt","aha1");
+             socket.emit("loadlist","aha");
+            }
+              });
+        
+        
         $(function () {
 
         socket.on('listinfo',function(msg){
-                app4.items = msg;
+                app2.items = msg;
         });
 
 
@@ -318,32 +367,34 @@ var msg = [{DS_id: "Drink Station",_id: "5d43af0a7fc55b074b15dbaf",info: "4 floo
         
           if (theid ==  msg. Equipment_Identifier)
           {
-       app4.showav1 = true;
-       setTimeout(function() { app4.showav1 = false;  }, 1000);
+       // app3.seenmap = false;
+       // app1.seen = true;
+       app1.showav1 = true;
+       setTimeout(function() { app1.showav1 = false;  }, 1000);
 
-                        app4.Trading_Partner_Name = msg.Trading_Partner_Name;
-                        app4.Transaction_ID  =   msg. Transaction_ID;
-                        app4.Primary_Telemetry_ID = msg.Primary_Telemetry_ID;
-                        app4.Equipment_Identifier = msg.Equipment_Identifier;
-                        app4.Date_Of_Transaction = msg.Date_Of_Transaction;
-                        app4.Product_UPC_Code = msg.Product_UPC_Code;
-                        app4.Product_Quantity = msg.Product_Quantity;
-                        app4.Syrup_1_Used = msg.Syrup_1_Used;
-                        app4.Syrup_2_Used = msg.Syrup_2_Used;
-                        app4.Syrup_3_Used = msg.Syrup_3_Used;
-                        app4.Syrup_4_Used = msg.Syrup_4_Used;
-                        app4.Syrup_1_Remaining = msg.Syrup_1_Remaining;
-                        app4.Syrup_2_Remaining = msg.Syrup_2_Remaining;
-                        app4.Syrup_3_Remaining = msg.Syrup_3_Remaining;
-                        app4.Syrup_4_Remaining = msg.Syrup_4_Remaining;
-                        app4.Chiller_Bucket_Actual_Temp = msg.Chiller_Bucket_Actual_Temp;
-                        app4.Hot_Tank_Actual_Temp = msg.Hot_Tank_Actual_Temp;
+                        app1.Trading_Partner_Name = msg.Trading_Partner_Name;
+                        app1.Transaction_ID  =   msg. Transaction_ID;
+                        app1.Primary_Telemetry_ID = msg.Primary_Telemetry_ID;
+                        app1.Equipment_Identifier = msg.Equipment_Identifier;
+                        app1.Date_Of_Transaction = msg.Date_Of_Transaction;
+                        app1.Product_UPC_Code = msg.Product_UPC_Code;
+                        app1.Product_Quantity = msg.Product_Quantity;
+                        app1.Syrup_1_Used = msg.Syrup_1_Used;
+                        app1.Syrup_2_Used = msg.Syrup_2_Used;
+                        app1.Syrup_3_Used = msg.Syrup_3_Used;
+                        app1.Syrup_4_Used = msg.Syrup_4_Used;
+                        app1.Syrup_1_Remaining = msg.Syrup_1_Remaining;
+                        app1.Syrup_2_Remaining = msg.Syrup_2_Remaining;
+                        app1.Syrup_3_Remaining = msg.Syrup_3_Remaining;
+                        app1.Syrup_4_Remaining = msg.Syrup_4_Remaining;
+                        app1.Chiller_Bucket_Actual_Temp = msg.Chiller_Bucket_Actual_Temp;
+                        app1.Hot_Tank_Actual_Temp = msg.Hot_Tank_Actual_Temp;
 
                     
-                        var v1 =  Math.floor(parseInt(app4.Syrup_1_Used)/12*44);
-                        var v2 =  Math.floor(parseInt(app4.Syrup_2_Used)/12*44);
-                        var v3 =  Math.floor( parseInt(app4.Syrup_3_Used)/12*44);
-                        var v4 =  Math.floor(parseInt(app4.Syrup_4_Used)/12*44);
+                        var v1 =  Math.floor(parseInt(app1.Syrup_1_Used)/12*44);
+                        var v2 =  Math.floor(parseInt(app1.Syrup_2_Used)/12*44);
+                        var v3 =  Math.floor( parseInt(app1.Syrup_3_Used)/12*44);
+                        var v4 =  Math.floor(parseInt(app1.Syrup_4_Used)/12*44);
                         document.getElementById("rect1").setAttribute("y", v1);
                         document.getElementById("rect1").setAttribute("height", (44-v1));
                         document.getElementById("rect2").setAttribute("y", v2);
@@ -361,29 +412,29 @@ var msg = [{DS_id: "Drink Station",_id: "5d43af0a7fc55b074b15dbaf",info: "4 floo
         {
      // app3.seenmap = false;
      // app1.seen = true;
-                      app4.Trading_Partner_Name = msg.Trading_Partner_Name;
-                      app4.Transaction_ID  =   msg. Transaction_ID;
-                      app4.Primary_Telemetry_ID = msg.Primary_Telemetry_ID;
-                      app4.Equipment_Identifier = msg.Equipment_Identifier;
-                      app4.Date_Of_Transaction = msg.Date_Of_Transaction;
-                      app4.Product_UPC_Code = msg.Product_UPC_Code;
-                      app4.Product_Quantity = msg.Product_Quantity;
-                      app4.Syrup_1_Used = msg.Syrup_1_Used;
-                      app4.Syrup_2_Used = msg.Syrup_2_Used;
-                      app4.Syrup_3_Used = msg.Syrup_3_Used;
-                      app4.Syrup_4_Used = msg.Syrup_4_Used;
-                      app4.Syrup_1_Remaining = msg.Syrup_1_Remaining;
-                      app4.Syrup_2_Remaining = msg.Syrup_2_Remaining;
-                      app4.Syrup_3_Remaining = msg.Syrup_3_Remaining;
-                      app4.Syrup_4_Remaining = msg.Syrup_4_Remaining;
-                      app4.Chiller_Bucket_Actual_Temp = msg.Chiller_Bucket_Actual_Temp;
-                      app4.Hot_Tank_Actual_Temp = msg.Hot_Tank_Actual_Temp;
+                      app1.Trading_Partner_Name = msg.Trading_Partner_Name;
+                      app1.Transaction_ID  =   msg. Transaction_ID;
+                      app1.Primary_Telemetry_ID = msg.Primary_Telemetry_ID;
+                      app1.Equipment_Identifier = msg.Equipment_Identifier;
+                      app1.Date_Of_Transaction = msg.Date_Of_Transaction;
+                      app1.Product_UPC_Code = msg.Product_UPC_Code;
+                      app1.Product_Quantity = msg.Product_Quantity;
+                      app1.Syrup_1_Used = msg.Syrup_1_Used;
+                      app1.Syrup_2_Used = msg.Syrup_2_Used;
+                      app1.Syrup_3_Used = msg.Syrup_3_Used;
+                      app1.Syrup_4_Used = msg.Syrup_4_Used;
+                      app1.Syrup_1_Remaining = msg.Syrup_1_Remaining;
+                      app1.Syrup_2_Remaining = msg.Syrup_2_Remaining;
+                      app1.Syrup_3_Remaining = msg.Syrup_3_Remaining;
+                      app1.Syrup_4_Remaining = msg.Syrup_4_Remaining;
+                      app1.Chiller_Bucket_Actual_Temp = msg.Chiller_Bucket_Actual_Temp;
+                      app1.Hot_Tank_Actual_Temp = msg.Hot_Tank_Actual_Temp;
 
                   
-                      var v1 =  Math.floor(parseInt(app4.Syrup_1_Used)/12*44);
-                      var v2 =  Math.floor(parseInt(app4.Syrup_2_Used)/12*44);
-                      var v3 =  Math.floor( parseInt(app4.Syrup_3_Used)/12*44);
-                      var v4 =  Math.floor(parseInt(app4.Syrup_4_Used)/12*44);
+                      var v1 =  Math.floor(parseInt(app1.Syrup_1_Used)/12*44);
+                      var v2 =  Math.floor(parseInt(app1.Syrup_2_Used)/12*44);
+                      var v3 =  Math.floor( parseInt(app1.Syrup_3_Used)/12*44);
+                      var v4 =  Math.floor(parseInt(app1.Syrup_4_Used)/12*44);
                       document.getElementById("rect1").setAttribute("y", v1);
                       document.getElementById("rect1").setAttribute("height", (44-v1));
                       document.getElementById("rect2").setAttribute("y", v2);
@@ -399,8 +450,8 @@ var msg = [{DS_id: "Drink Station",_id: "5d43af0a7fc55b074b15dbaf",info: "4 floo
 
 function showmap()
 {
-      app4.seen = false;
-     app4.seenmap = true;
+      app1.seen = false;
+     app3.seenmap = true;
      setTimeout(function() {
       map = new AMap.Map('map', {
        center:[117.000923,36.675807],
@@ -408,54 +459,12 @@ function showmap()
 });
 socket.emit("loadmapinfo","aha");
 }, 100);
+
+
+
      
 }
-
-var win_h = $(window).height();   // returns height of browser viewport
-var doc_h = $(document).height(); // returns height of HTML document (same as pageHeight in screenshot)
-var win_w = $(window).width();   // returns width of browser viewport
-var doc_w = $(document).width();
-var zoomscale = win_w/700; 
-
-var app4 = new Vue({
-                el: '#fullpage',
-                data: {
-        color1:'show1',
-        color2:'show2',
-        color3:'show3',
-        color4:'show4',
-        color5:'show5',
-        zoom: 'scale(' + zoomscale +')',
-        showav1:false,
-        seenmap:false,
-                        seen : false,
-                        Trading_Partner_Name:"",
-                        Transaction_ID:"",
-                        Primary_Telemetry_ID:"",
-                        Equipment_Identifier:"",
-                        Date_Of_Transaction:"",
-                        Product_UPC_Code:"",
-                        Product_Quantity:"",
-                        Syrup_1_Used:"",
-                        Syrup_2_Used:"",
-                       Syrup_3_Used:"",
-                       Syrup_4_Used:"",
-                       Syrup_1_Remaining:"",
-                       Syrup_2_Remaining:"",
-                       Syrup_3_Remaining:"",
-                       Syrup_4_Remaining:"",
-                       Chiller_Bucket_Actual_Temp:"",
-                       Hot_Tank_Actual_Temp:"",
-                       
-    items: []
-  },
-  created: function(){
-            socket.emit("usemqtt","aha1");
-             socket.emit("loadlist","aha");
-            }
-});
-
-</script>
+        </script>
 
 </body>
 </html>

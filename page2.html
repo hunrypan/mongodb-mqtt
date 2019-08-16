@@ -1,0 +1,103 @@
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<head>
+        <title>Drink Station</title>
+</head>
+
+<body>
+<style>
+
+        #fullpage  {
+            width: 900;
+            transform-origin: 0 0;
+            background-color: blueviolet;   
+        }
+
+        #show1  img{
+            width: 434;
+            height: 244;
+            position: absolute;
+            top: 50;
+            left: 150;
+        }
+
+        #show2 img{
+            width: 434;
+            height:212;
+            position: absolute;
+            top: 344;
+            left: 150;
+        }
+
+        #helpshow img{
+            width:293px; 
+            height:243px;
+            position: absolute;
+            top: 150;
+            left: 604;
+        }
+
+        #idshow img {
+            width: 252px;
+            height: 39px;
+            position: absolute;
+            top: 50;
+            left: 624;
+        } 
+
+</style>
+
+<div id= "fullpage" v-bind:style= "{transform: zoom}" > 
+<div id="show1">
+<img src="BOX1.png"/>
+</div>
+
+<div id="show2">
+<img src="BOX2.png"/>
+</div>
+
+<div id="helpshow">
+<img src="helpshow.png"/>
+</div>
+
+<div id="idshow">
+        <img src="ID.png"/>
+</div>
+</div>
+
+<script>
+var socket = io();
+var win_h = $(window).height();   // returns height of browser viewport
+var doc_h = $(document).height(); // returns height of HTML document (same as pageHeight in screenshot)
+var win_w = $(window).width();   // returns width of browser viewport
+var doc_w = $(document).width();
+var zoomscale = win_w/900; 
+
+var url = document.URL; 
+var mid=url.substring(url.lastIndexOf("/")+1,url.length);
+    console.log(mid);
+
+$(function () {
+    socket.on('waterinfo2',function(msg){
+        console.log(msg);
+    });
+})
+
+    var app = new Vue({
+                el: '#fullpage',
+                data: {
+        zoom: 'scale(' + zoomscale +')'
+        },
+        created: function(){
+            document.URL
+             socket.emit("loadmachine",mid);
+            }
+});
+</script>
+
+
+
+</body>
+</html>
