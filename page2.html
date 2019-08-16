@@ -141,8 +141,8 @@ var mid=url.substring(url.lastIndexOf("/")+1,url.length);
 
     var app = new Vue({
                 el: '#fullpage',
-                data: {MID,TIME,WTYPE,WNUM,
-U1,U2,U3,U4,U5,U6,R1,R2,R3,R4,R5,R6,COLD,HOT,S1,S2,S3,S4,
+                data: {MID:"",TIME:"",WTYPE:"",WNUM:"",
+U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",HOT:"",S1:"",S2:"",S3:"",S4:"",
         zoom: 'scale(' + zoomscale +')'
         },
         created: function(){
@@ -153,9 +153,45 @@ U1,U2,U3,U4,U5,U6,R1,R2,R3,R4,R5,R6,COLD,HOT,S1,S2,S3,S4,
 
     socket.on('waterinfo2',function(msg){
         console.log(msg.MID);
+        app.MID = msg.MID;
+    app.TIME = msg.TIME;
+     app.WTYPE = msg.WTYPE;
+     app.WNUM = msg.WNUM;
+     app.U1 = msg.U1;
+     app.U2 = msg.U2;
+     app.U3 = msg.U3;
+     app.U4 = msg.U4;
+     app.U5 = msg.U5;
+     app.U6 = msg.U6;
+     app.R1 = msg.R1;
+     app.R2 = msg.R2;
+     app.R3 = msg.R3;
+     app.R4 = msg.R4;
+     app.R5 = msg.R5;
+     app.R6 = msg.R6;
+     app.COLD = msg.COLD;
+     app.HOT=msg.HOT;
+     app.S1 = msg.S1;
+     app.S2 = msg.S2;
+     app.S3 = msg.S3;
+     app.S4 = msg.S4;
+                  
+                      var v1 =  Math.floor(parseInt(app.U1)/12*200);
+                      var v2 =  Math.floor(parseInt(app.U2)/12*200);
+                      var v3 =  Math.floor(parseInt(app.U3)/12*200);
+                      var v4 =  Math.floor(parseInt(app.U4)/12*200);
+                      var v5 =  Math.floor(parseInt(app.U5)/12*200);
+                      var v6 =  Math.floor(parseInt(app.U6)/12*200);
+
+               
+                      document.getElementById("svg1white").setAttribute("height", v1);
+                      document.getElementById("svg2white").setAttribute("height", v2);
+                      document.getElementById("svg3white").setAttribute("height", v3);
+                      document.getElementById("svg4white").setAttribute("height", v4);
+                      document.getElementById("svg5white").setAttribute("height", v5);
+                      document.getElementById("svg6white").setAttribute("height", v6);
     });
 
-    /*
     socket.on('waterinfo', function(msg){
     app.MID = msg.MID;
     app.TIME = msg.TIME;
@@ -196,7 +232,6 @@ U1,U2,U3,U4,U5,U6,R1,R2,R3,R4,R5,R6,COLD,HOT,S1,S2,S3,S4,
                       document.getElementById("svg6white").setAttribute("height", v6);
        
     })
-*/
 </script>
 
 
