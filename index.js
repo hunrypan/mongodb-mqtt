@@ -126,7 +126,6 @@ app.get('/DC07A*',function(req,res){
 })
 
 
-
 app.get('/mapinfo', function(req, res){
   res.setHeader('Content-Type', 'application/json');
   MongoClient.connect(url, function(err, db) {
