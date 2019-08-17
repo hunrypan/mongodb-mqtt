@@ -12,18 +12,33 @@
         #fullpage  {
             width: 400;
             transform-origin: 0 0;
-            background-color: blueviolet;
-            
+            padding-top: 40;
+        
         }
+
 .bt  {
-        display: flex;
-  justify-content: center;
+    position: relative;
+  width: 151;
+  height: 19;  
   padding: 4;
+  top: 1;
+  left: 120;
 }
 
-.bt button{
-    background-image: url ('./dropwater.png') ;
+.bt img{
+    background-image: url('item.png');
     cursor: grab; 
+    height: 19;
+    width: 151;
+}
+
+.bt h3{
+    position: absolute;
+    height: 15;
+    width: 90;
+    top: -8;
+    left: 33;
+    font-size: 14; 
 }
 
 
@@ -32,8 +47,9 @@
 <div id= "fullpage" v-bind:style= "{ transform: zoom}" > 
 <div id = "list">
  
-     <div   class="bt"  v-for="item in items"   v-on:click="show();" >
-            <a class="btitem" :href="item.MID">{{ item.MID}}</a>
+     <div   class="bt"  v-for="item in items" >
+         <img src="item.png"  v-on:click="window.location.href = item.MID " />
+            <h3>{{ item.MID}}</h3>
      </div>
 
 </div>

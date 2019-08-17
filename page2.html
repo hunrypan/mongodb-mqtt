@@ -34,13 +34,13 @@
         #p1{
             position: absolute;
             top: 410;
-            left: 396;
+            left: 231;
         }
 
         #p2{
             position: absolute;
             top: 490;
-            left: 396;
+            left: 231;
         }
 
         #helpshow img{
@@ -148,11 +148,11 @@
 <img src="BOX2.png"/>
 
 <svg id = "p1">
-    <rect    width="10"  height="40" style="fill:rgb(17, 240, 28)"/>
+    <rect  :x="showclod"  y="0"   width="10"  height="40" style="fill:rgb(17, 240, 28)"/>
 </svg>
 
 <svg id ="p2">
-    <rect    width="10"  height="40" style="fill:rgb(228, 44, 12)"/>
+    <rect  :x="0"  y= "showhot"  width="10"  height="40" style="fill:rgb(228, 44, 12)"/>
 </svg>
 
 </div>
@@ -190,8 +190,8 @@ var mid=url.substring(url.lastIndexOf("/")+1,url.length);
     var app = new Vue({
                 el: '#fullpage',
                 data: {MID:"",TIME:"",WTYPE:"",WNUM:"",
-U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",HOT:"",S1:"",S2:"",S3:"",S4:"",
-        zoom: 'scale(' + zoomscale +')'
+U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",HOT:"",S1:"",S2:"",S3:"",S4:"",showclod:"",showhot:"",
+        zoom: 'scale(' + zoomscale +')' 
         },
         created: function(){
              socket.emit("loadmachine",mid);
@@ -223,6 +223,8 @@ U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",
      app.S2 = msg.S2;
      app.S3 = msg.S3;
      app.S4 = msg.S4;
+     app.showclod = Math.floor((parseInt(app.COLD) + 5)   *   330/35);
+     app.showhot =  Math.floor((parseInt(app.HOT)-50) * 330/35);
                   
                       var v1 =  Math.floor(parseInt(app.U1)/12*200);
                       var v2 =  Math.floor(parseInt(app.U2)/12*200);
@@ -238,6 +240,7 @@ U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",
                       document.getElementById("svg4white").setAttribute("height", v4);
                       document.getElementById("svg5white").setAttribute("height", v5);
                       document.getElementById("svg6white").setAttribute("height", v6);
+
     });
 
     socket.on('waterinfo', function(msg){
@@ -263,6 +266,9 @@ U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",
      app.S2 = msg.S2;
      app.S3 = msg.S3;
      app.S4 = msg.S4;
+
+     app.showclod = Math.floor((parseInt(app.COLD) + 5)   *   330/35);
+     app.showhot =  Math.floor((parseInt(app.HOT)-50) * 330/35);
                   
                       var v1 =  Math.floor(parseInt(app.U1)/12*200);
                       var v2 =  Math.floor(parseInt(app.U2)/12*200);
