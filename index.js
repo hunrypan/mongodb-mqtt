@@ -106,7 +106,7 @@ MongoClient.connect(url, function(err, db) {
 }
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/page1.html');
 });
 
 app.get('/*.html', function (req, res) {

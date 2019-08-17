@@ -45,6 +45,24 @@
             position: absolute;
             top: 50;
             left: 624;
+        }
+
+        #idshow  h2{
+            width: 180px;
+            height: 35px;
+            position: absolute;
+            top: 30;
+            left: 680;
+            color:white;
+        }
+
+        #back img{
+            width: 134;
+            height: 39;
+            position: absolute;
+            top: 50;
+            left: 5;
+            cursor: grab; 
         } 
 
         #svg1{
@@ -124,8 +142,17 @@
 
 <div id="idshow">
         <img src="ID.png"/>
+        <h2>{{MID}}</h2>
 </div>
+
+<div id="back">
+    <img src="home.png"  v-on:click="window.location.href ='/' "/>
+
+</div> 
+
 </div>
+
+
 
 <script>
 var socket = io();
