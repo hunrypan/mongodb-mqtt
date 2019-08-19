@@ -154,21 +154,29 @@ app.get('/orders', function(req, res){
   })
 });
 
-app.get('/saveorder',function(req, res) {
+app.post('/saveorder',function(req, res) {
 
-  var theinfo = {"payid":"0001","paytype":"paypal","orderinfo":"24_00_00_10_20_10:","price":"3.00","time":"2019-09-15 20:48:56","orderstate":"payed","MachineID":"DSDA17H0002"};
-  MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
+  var content = '';
+  req.on('data', function (data) {
+     content += data;
+  });
+  req.on('end', function () {
 
-      var dbo = db.db("drankstation"); 
-      dbo.collection("order").insertOne(theinfo,function(err, result) {
-        if (err) throw err;
-        res.end("saved");
-        console.log("1 order save");
-        db.close();
+    var theinfo = JSON.parse(content);
+    theinfo["time"] = "" +  Date.now() ;
+    
+    MongoClient.connect(url, function(err, db) {
+      assert.equal(null, err);
+        var dbo = db.db("drankstation"); 
+        dbo.collection("order").insertOne(theinfo,function(err, result) {
+          if (err) throw err;
+          res.end("{save:ok}");
+          console.log("1 order save");
+          db.close();
+        })
       })
-    })
 
+  });
 })
 
 
