@@ -39,6 +39,7 @@
     top: -8;
     left: 33;
     font-size: 14; 
+    cursor: grab; 
 }
 
 
@@ -49,7 +50,7 @@
  
      <div   class="bt"  v-for="item in items" >
          <img src="item.png"  v-on:click="window.location.href = item.MID " />
-            <h3>{{ item.MID}}</h3>
+            <h3 v-on:click="window.location.href = item.MID " >{{ item.MID}}</h3>
      </div>
 
 </div>
