@@ -122,34 +122,43 @@
       top: 98;
 }
 
+#help{
+      position: absolute;
+      left: 550;
+      top: 260;
+}
+
 </style>
 
 <div id= "fullpage" v-bind:style= "{transform: zoom}" > 
 <div id="show1">
 <img src="BOX1.png"/>
 <svg id = "svg1">
-        <rect    width="30"  height="200" style="fill:rgb(238,237,164)"/> 
+        <rect    width="30"  :height="svgheight"  style="fill:rgb(238,237,164)"/> 
         <rect  id ="svg1white"  width="30"  height="0" style="fill:rgb(255,255,255)"/>                               
 </svg>
 <svg id = "svg2">
-        <rect    width="30"  height="200" style="fill:rgb(230,207,218)"/> 
+        <rect    width="30"  :height="svgheight"  style="fill:rgb(230,207,218)"/> 
         <rect  id ="svg2white"  width="30"  height="0" style="fill:rgb(255,255,255)"/>                               
 </svg>
 <svg id = "svg3">
-        <rect    width="30"  height="200" style="fill:rgb(255,226,207)"/> 
+        <rect    width="30"  :height="svgheight" style="fill:rgb(255,226,207)"/> 
         <rect  id ="svg3white"  width="30"  height="0" style="fill:rgb(255,255,255)"/>                               
 </svg>
 <svg id = "svg4">
-        <rect    width="30"  height="200" style="fill:rgb(183,201,165)"/> 
+        <rect    width="30"  :height="svgheight" style="fill:rgb(183,201,165)"/> 
         <rect  id ="svg4white"  width="30"  height="0" style="fill:rgb(255,255,255)"/>                               
 </svg>
 <svg id = "svg5">
-        <rect    width="30"  height="200" style="fill:rgb(241,255,212)"/> 
+        <rect    width="30"  :height="svgheight" style="fill:rgb(241,255,212)"/> 
         <rect  id ="svg5white"  width="30"  height="0" style="fill:rgb(255,255,255)"/>                               
 </svg>
 <svg id = "svg6">
-        <rect    width="30"  height="200" style="fill:rgb(172,204,232)"/> 
+        <rect    width="30"  :height="svgheight" style="fill:rgb(172,204,232)"/> 
         <rect  id ="svg6white"  width="30"  height="0" style="fill:rgb(255,255,255)"/>                               
+</svg>
+<svg id = "help" v-on:click=" app.showhelp = !app.showhelp">
+    <rect    width="30"  height="30" style="fill:rgb(255,255,255);opacity:0"/> 
 </svg>
 </div>
 
@@ -166,7 +175,7 @@
 
 </div>
 
-<div id="helpshow">
+<div id="helpshow" v-show="showhelp">
 <img src="helpshow.png"/>
 </div>
 
@@ -204,7 +213,7 @@ var mid=url.substring(url.lastIndexOf("/")+1,url.length);
                 el: '#fullpage',
                 data: {MID:"",TIME:"",WTYPE:"",WNUM:"",
 U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",HOT:"",S1:"",S2:"",S3:"",S4:"",showclod:"",showhot:"",
-        zoom: 'scale(' + zoomscale +')' 
+        zoom: 'scale(' + zoomscale +')',showhelp:false,svgheight:150  
         },
         created: function(){
              socket.emit("loadmachine",mid);
@@ -238,7 +247,7 @@ U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",
      app.S4 = msg.S4;
      app.showclod = Math.floor((parseInt(app.COLD) + 5)   *   330/35);
      app.showhot =  Math.floor((parseInt(app.HOT)-50) * 330/50);
-                  
+
                       var v1 =  Math.floor(parseInt(app.U1)/99.0*150);
                       var v2 =  Math.floor(parseInt(app.U2)/99.0*150);
                       var v3 =  Math.floor(parseInt(app.U3)/99.0*150);
@@ -253,6 +262,8 @@ U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",
                       document.getElementById("svg4white").setAttribute("height", v4);
                       document.getElementById("svg5white").setAttribute("height", v5);
                       document.getElementById("svg6white").setAttribute("height", v6);
+
+                      
 
     });
 
