@@ -77,14 +77,25 @@
             color:white;
         }
 
-        #back img{
+        #back {
             width: 134;
             height: 39;
             position: absolute;
             top: 50;
             left: 5;
             cursor: grab; 
+            background: url("homeup.png");
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position: center center; 
         } 
+
+        #back:hover {
+  background: url('home.png');
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position: center center;
+}
 
         #svg1{
       position: absolute;
@@ -126,6 +137,7 @@
       position: absolute;
       left: 550;
       top: 260;
+      cursor: grab; 
 }
 
 </style>
@@ -184,9 +196,7 @@
         <h2>{{MID}}</h2>
 </div>
 
-<div id="back">
-    <img src="home.png"  v-on:click="window.location.href ='/' "/>
-
+<div id="back" v-on:click="window.location.href ='/'" >
 </div> 
 
 <div id="infov">
@@ -203,7 +213,7 @@ var win_h = $(window).height();   // returns height of browser viewport
 var doc_h = $(document).height(); // returns height of HTML document (same as pageHeight in screenshot)
 var win_w = $(window).width();   // returns width of browser viewport
 var doc_w = $(document).width();
-var zoomscale = win_w/900; 
+var zoomscale = win_w/900 * 0.99; 
 
 var url = document.URL; 
 var mid=url.substring(url.lastIndexOf("/")+1,url.length);

@@ -17,19 +17,26 @@
         }
 
 .bt  {
-    position: relative;
+  position: relative;
   width: 151;
   height: 19;  
   padding: 4;
   top: 1;
   left: 120;
+  background: url('itemup.png');
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position: center center;
+  cursor: grab; 
 }
 
-.bt img{
-    background-image: url('item.png');
-    cursor: grab; 
-    height: 19;
-    width: 151;
+
+.bt:hover {
+  /* box-shadow: 0 0 2px 1px rgba(218, 233, 16, 0.5); */
+  background: url('item.png');
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position: center center;
 }
 
 .bt h3{
@@ -39,7 +46,6 @@
     top: -8;
     left: 33;
     font-size: 14; 
-    cursor: grab; 
 }
 
 
@@ -48,8 +54,7 @@
 <div id= "fullpage" v-bind:style= "{ transform: zoom}" > 
 <div id = "list">
  
-     <div   class="bt"  v-for="item in items" >
-         <img src="item.png"  v-on:click="window.location.href = item.MID " />
+     <div   class="bt"  v-for="item in items"  v-on:click="window.location.href = item.MID ">
             <h3 v-on:click="window.location.href = item.MID " >{{ item.MID}}</h3>
      </div>
 

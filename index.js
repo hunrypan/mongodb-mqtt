@@ -95,6 +95,16 @@ MongoClient.connect(url, function(err, db) {
   })
 
   MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    var dbo = db.db("drankstation"); 
+    dbo.collection(MID).insertOne(theobj,function(err, res) {
+      if (err) throw err;
+      console.log(MID + "collection  insert");
+      db.close();
+    })
+  })
+
+  MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     var dbo = db.db("drankstation");
     dbo.collection("machine").find({},{projection:{MID:1,U1:2}}).toArray(function(err, result)  {
@@ -195,7 +205,21 @@ io.on('connection', function(socket){
     })
   })
   });
-  
+
+
+  socket.on('waterdata',function(msg){
+  console.log("waterdata" + msg);
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    var query = { "MID":1,"WTYPE":1,"WNUM":1};
+    var dbo = db.db("drankstation"); 
+    dbo.collection(msg).findOne(query,function(err, result) {
+      if (err) throw err;
+      io.emit("waterdata",result);
+      db.close();
+    })
+  })
+  })
 
 
 socket.on('loadlist',function(msg){
