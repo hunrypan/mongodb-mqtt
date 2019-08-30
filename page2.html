@@ -15,6 +15,15 @@
             background-color: blueviolet;   
         }
 
+        #datashow  {
+            width: 434;
+            height: 244;
+            position: absolute;
+            top: 50;
+            left: 150;
+        }
+
+
         #show1  img{
             width: 434;
             height: 244;
@@ -97,6 +106,51 @@
   background-position: center center;
 }
 
+#chart {
+            width: 100;
+            height: 30;
+            position: absolute;
+            top: 110;
+            left: 20;
+            cursor: grab; 
+            background-color: rgb(75,114,182);
+            text-align: center;
+        } 
+
+        #chart:hover {
+            background-color:rgb(63, 100,166);
+}
+
+#data {
+            width: 100;
+            height: 30;
+            position: absolute;
+            top: 150;
+            left: 20;
+            text-align: center;
+            cursor: grab; 
+            background-color: rgb(75,114,182);
+        } 
+
+        #data:hover {
+            background-color:rgb(63, 100,166);
+}
+
+#order {
+            width: 100;
+            height: 30;
+            position: absolute;
+            top: 190;
+            left: 20;
+            text-align: center;
+            cursor: grab; 
+            background-color: rgb(75,114,182);
+        } 
+
+        #order:hover {
+            background-color:rgb(63, 100,166);
+}
+
         #svg1{
       position: absolute;
       left: 220;
@@ -140,10 +194,67 @@
       cursor: grab; 
 }
 
+table {
+  width: 100%;
+}
+
+th, td {
+  font-weight: unset;
+  padding-right: 10;
+}
+
+.column1 {
+  width: 20%;
+  padding-left: 10;
+}
+
+.column2 {
+  width: 15%;
+}
+
+.column3 {
+  width: 15%;
+}
+
+.column4 {
+  width: 15%;
+}
+
+.column5 {
+  width: 15%;
+}
+
+.column6 {
+  width: 20%;
+}
+
+.tablebody {
+  max-height: 80;
+  overflow: auto;
+}
+
+.tablehead td {
+  font-family: Lato-Bold;
+  font-size: 16px;
+  color: #fff;
+  line-height: 1.4;
+
+  background-color: #6c7ae0;
+}
+
+.tablebody td {
+  font-family: Lato-Regular;
+  font-size: 15px;
+  color: #808080;
+  line-height: 1.4;
+}
+
+.tablebody tr:nth-child(even) {
+  background-color: #f8f6ff;
 </style>
 
 <div id= "fullpage" v-bind:style= "{transform: zoom}" > 
-<div id="show1">
+<div id="show1" v-show="showchart">
 <img src="BOX1.png"/>
 <svg id = "svg1">
         <rect    width="30"  :height="svgheight"  style="fill:rgb(238,237,164)"/> 
@@ -174,7 +285,7 @@
 </svg>
 </div>
 
-<div id="show2">
+<div id="show2" v-show="showchart">
 <img src="BOX2.png"/>
 
 <svg id = "p1">
@@ -196,8 +307,51 @@
         <h2>{{MID}}</h2>
 </div>
 
+<div id="datashow" v-show="showdata">
+<table class="tablehead">
+                <tr>
+                    <td class="column1">Time</td>
+                    <td class="column2">Still</td>
+                    <td class="column3">Sparkling</td>
+                    <td class="column4">Hot</td>
+                    <td class="column5">Alkaline</td>
+                    <td class="column6">Bottle saved</td>
+                </tr>
+</table>
+
+<div class="tablebody">
+    <table>
+<tr v-for="item in items">
+ <td class="column1">{{item.time}}</td>
+ <td class="column2">{{item.cold}}</td>
+ <td class="column3">{{item.spark}}</td>
+ <td class="column4">{{item.hot}}</td>
+ <td class="column5">{{item.alke}}</td>
+ <td class="column6">{{item.save}}</td>         
+</tr> 
+    </table>
+</div>
+
+<table class="tablebutton">
+                <tr>
+                    <td class="column1">SUM</td>
+                    <td class="column2">{{sum_CD}}</td>
+                    <td class="column3">{{sum_SP}}</td>
+                    <td class="column4">{{sum_HT}}</td>
+                    <td class="column5">{{sum_AK}}</td>
+                    <td class="column6">{{(sum_save/350).toFixed(2)}}</td>
+                </tr>
+</table>
+</div>
+
 <div id="back" v-on:click="window.location.href ='/'" >
 </div> 
+
+<div id="chart" v-on:click="showdata = false;showorder = false;showchart = true" >Chart</div> 
+
+<div id="data" v-on:click="showchart = false; showdata = false; showdata = true;socket.emit('waterdata',mid)" >Data</div> 
+
+<div id="order" v-on:click="showchart = false; showdata = false; showorder = true" >Order</div> 
 
 <div id="infov">
 <h3>{{MID}} {{TIME}} {{WTYPE}} {{WNUM}} {{U1}}  {{U2}} {{U3}} {{U4}} {{U5}} {{U6}} {{R1}} {{R2}} {{R3}} {{R4}} {{R5}} {{R6}} {{COLD}} {{HOT}} {{S1}} {{S2}} {{S3}} {{S4}}</h3>
@@ -223,12 +377,68 @@ var mid=url.substring(url.lastIndexOf("/")+1,url.length);
                 el: '#fullpage',
                 data: {MID:"",TIME:"",WTYPE:"",WNUM:"",
 U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",HOT:"",S1:"",S2:"",S3:"",S4:"",showclod:"",showhot:"",
-        zoom: 'scale(' + zoomscale +')',showhelp:false,svgheight:150  
+        zoom: 'scale(' + zoomscale +')',showhelp:false,svgheight:150,showchart:true,showdata:false,showorder:false,items: [],orders:[],sum_CD:0,sum_AK:0,sum_HT:0,sum_SP:0,sum_save:0  
         },
         created: function(){
              socket.emit("loadmachine",mid);
             }
 });
+
+socket.on('waterdatainfo',function(msg)
+{
+
+app.sum_CD = 0;
+app.sum_HT = 0;
+app.sum_SP = 0;
+app.sum_AK = 0;
+app.sum_save = 0;
+
+  for (i = 0; i < msg.length; i++) {
+      var item = msg[i];
+      var wtype = item.WTYPE;    
+
+var ht = 0;
+var cd = 0;
+var ak = 0;
+var sp = 0;
+var save = (parseInt(item.WNUM)/350).toFixed(2);
+
+
+if(wtype == "HT")
+{
+ht =  parseInt(item.WNUM);
+app.sum_HT += ht;
+}
+
+if(wtype == "CD")
+{
+cd =  parseInt(item.WNUM);
+app.sum_CD += cd;
+}
+
+
+if(wtype == "AK")
+{
+ak =  parseInt(item.WNUM);
+app.sum_AK += ak;
+}
+
+if(wtype == "SP")
+{
+sp =  parseInt(item.WNUM);
+app.sum_SP += sp;
+}
+
+var  newitem = {"time":item.TIME,"hot":ht,"cold":cd,"spark":sp,"alke":ak,"save":save };
+  app.items.push(newitem);
+
+  app.sum_save +=  parseInt(item.WNUM)
+} 
+
+
+ 
+
+}); 
 
 
     socket.on('waterinfo2',function(msg){

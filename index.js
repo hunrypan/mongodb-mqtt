@@ -211,11 +211,10 @@ io.on('connection', function(socket){
   console.log("waterdata" + msg);
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
-    var query = { "MID":1,"WTYPE":1,"WNUM":1};
     var dbo = db.db("drankstation"); 
-    dbo.collection(msg).findOne(query,function(err, result) {
+    dbo.collection(msg).find({},{projection:{"TIME":1,"WTYPE":1,"WNUM":1}}). toArray(function(err, result) {
       if (err) throw err;
-      io.emit("waterdata",result);
+      io.emit("waterdatainfo",result);
       db.close();
     })
   })
