@@ -24,6 +24,15 @@
         }
 
 
+        #ordershow  {
+            width: 434;
+            height: 244;
+            position: absolute;
+            top: 50;
+            left: 150;
+        }
+
+
         #show1  img{
             width: 434;
             height: 244;
@@ -196,6 +205,7 @@
 
 table {
   width: 100%;
+  /* table-layout: fixed;*/
 }
 
 th, td {
@@ -225,6 +235,26 @@ th, td {
 }
 
 .column6 {
+  width: 20%;
+}
+
+.column11 {
+  width: 30%;
+}
+
+.column12 {
+  width: 20%;
+}
+
+.column13 {
+  width: 10%;
+}
+
+.column14 {
+  width: 20%;
+}
+
+.column15 {
   width: 20%;
 }
 
@@ -322,7 +352,8 @@ th, td {
 <div class="tablebody">
     <table>
 <tr v-for="item in items">
- <td class="column1">{{item.time}}</td>
+ <td class="column1">{{item.time.substring(0,4)+ "-" + item.time.substring(4,6) + "-" + item.time.substring(6,8) + "\n" + 
+ item.time.substring(8,10) + "\:" + item.time.substring(10,12) + "\:" + item.time.substring(12,14) }}</td>
  <td class="column2">{{item.cold}}</td>
  <td class="column3">{{item.spark}}</td>
  <td class="column4">{{item.hot}}</td>
@@ -344,14 +375,41 @@ th, td {
 </table>
 </div>
 
+
+<div id="ordershow" v-show="showorder">
+<table class="tablehead">
+                <tr>
+                    <td class="column11">ID</td>
+                    <td class="column12">NAME</td>
+                    <td class="column13">$</td>
+                    <td class="column14">Date&time</td>
+                    <td class="column15">Type of syrup</td>
+                </tr>
+</table>
+
+<div class="tablebody">
+    <table>
+<tr v-for="item in orders">
+ <td class="column11">{{item._id.substring(0,12)  + "\n"  +  item._id.substring(12,item._id.length)}}</td>
+ <td class="column12">{{item.name}}</td>
+ <td class="column13">{{item.price}}</td>
+ <td class="column14">{{new Date(parseInt(item.time))}}</td>
+ <td class="column15">{{item.waterinfo}}</td>  
+</tr> 
+    </table>
+</div>
+</div>
+
 <div id="back" v-on:click="window.location.href ='/'" >
 </div> 
 
 <div id="chart" v-on:click="showdata = false;showorder = false;showchart = true" >Chart</div> 
 
-<div id="data" v-on:click="showchart = false; showdata = false; showdata = true;socket.emit('waterdata',mid)" >Data</div> 
+<div id="data" v-on:click="showchart = false; showorder = false; showdata = true;socket.emit('waterdata',mid)" >Data</div> 
 
-<div id="order" v-on:click="showchart = false; showdata = false; showorder = true" >Order</div> 
+<div id="order" v-on:click="showchart = false; showdata = false; showorder = true;socket.emit('orders','')" >Order</div> 
+
+
 
 <div id="infov">
 <h3>{{MID}} {{TIME}} {{WTYPE}} {{WNUM}} {{U1}}  {{U2}} {{U3}} {{U4}} {{U5}} {{U6}} {{R1}} {{R2}} {{R3}} {{R4}} {{R5}} {{R6}} {{COLD}} {{HOT}} {{S1}} {{S2}} {{S3}} {{S4}}</h3>
@@ -434,10 +492,12 @@ var  newitem = {"time":item.TIME,"hot":ht,"cold":cd,"spark":sp,"alke":ak,"save":
 
   app.sum_save +=  parseInt(item.WNUM)
 } 
+}); 
 
 
- 
-
+socket.on('ordersinfo',function(msg)
+{
+app.orders = msg; 
 }); 
 
 

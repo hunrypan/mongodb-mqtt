@@ -220,6 +220,18 @@ io.on('connection', function(socket){
   })
   })
 
+  socket.on('orders',function(msg){
+    MongoClient.connect(url, function(err, db) {
+      assert.equal(null, err);
+      var dbo = db.db("drankstation"); 
+      dbo.collection("order").find({}).toArray(function(err, result) {
+        if (err) throw err;
+        io.emit("ordersinfo",result);
+        db.close();
+      })
+    })
+    })
+
 
 socket.on('loadlist',function(msg){
   console.log("load list");
