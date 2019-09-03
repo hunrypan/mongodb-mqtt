@@ -239,7 +239,7 @@ th, td {
 }
 
 .column11 {
-  width: 30%;
+  width: 25%;
 }
 
 .column12 {
@@ -247,14 +247,18 @@ th, td {
 }
 
 .column13 {
-  width: 10%;
+  width: 15%;
 }
 
 .column14 {
-  width: 20%;
+  width: 10%;
 }
 
 .column15 {
+  width: 10%;
+}
+
+.column16 {
   width: 20%;
 }
 
@@ -379,22 +383,24 @@ th, td {
 <div id="ordershow" v-show="showorder">
 <table class="tablehead">
                 <tr>
-                    <td class="column11">ID</td>
+                    <td class="column11">Time</td>
                     <td class="column12">NAME</td>
                     <td class="column13">$</td>
-                    <td class="column14">Date&time</td>
-                    <td class="column15">Type of syrup</td>
+                    <td class="column14">Water type</td>
+                    <td class="column15">Water num</td>
+                    <td class="column16">Type of syrup</td>
                 </tr>
 </table>
 
 <div class="tablebody">
     <table>
 <tr v-for="item in orders">
- <td class="column11">{{item._id.substring(0,12)  + "\n"  +  item._id.substring(12,item._id.length)}}</td>
+ <td class="column11">{{item.waterinfo.substring(13,17)  +  "-"  +  item.waterinfo.substring(17,19) + "-" +  item.waterinfo.substring(19,21)  + "\n"  + item.waterinfo.substring(21,23) + "\:" + item.waterinfo.substring(23,25) + "\:" +  item.waterinfo.substring(25,27)}}</td>
  <td class="column12">{{item.name}}</td>
  <td class="column13">{{item.price}}</td>
- <td class="column14">{{new Date(parseInt(item.time))}}</td>
- <td class="column15">{{item.waterinfo}}</td>  
+ <td class="column14">{{item.waterinfo.substring(27,29)}}</td>
+ <td class="column15">{{item.waterinfo.substring(36,37)}}</td>  
+ <td class="column16">{{item.waterinfo.substring(29,36)}}</td>  
 </tr> 
     </table>
 </div>
