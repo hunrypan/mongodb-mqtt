@@ -2,6 +2,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=47b92d5661e2b59965a8d1491349670e"></script>
 <head>
         <title>Drink Station</title>
 </head>
@@ -25,6 +26,14 @@
 
 
         #ordershow  {
+            width: 434;
+            height: 244;
+            position: absolute;
+            top: 50;
+            left: 150;
+        }
+
+        #mapshow  {
             width: 434;
             height: 244;
             position: absolute;
@@ -121,6 +130,7 @@
             position: absolute;
             top: 110;
             left: 20;
+            color: white;
             cursor: grab; 
             background-color: rgb(75,114,182);
             text-align: center;
@@ -136,6 +146,7 @@
             position: absolute;
             top: 150;
             left: 20;
+            color: white;
             text-align: center;
             cursor: grab; 
             background-color: rgb(75,114,182);
@@ -151,12 +162,29 @@
             position: absolute;
             top: 190;
             left: 20;
+            color: white;
             text-align: center;
             cursor: grab; 
             background-color: rgb(75,114,182);
         } 
 
         #order:hover {
+            background-color:rgb(63, 100,166);
+}
+
+#map {
+            width: 100;
+            height: 30;
+            position: absolute;
+            top: 230;
+            left: 20;
+            color: white;
+            text-align: center;
+            cursor: grab; 
+            background-color: rgb(75,114,182);
+        } 
+
+        #map:hover {
             background-color:rgb(63, 100,166);
 }
 
@@ -341,6 +369,8 @@ th, td {
         <h2>{{MID}}</h2>
 </div>
 
+<div id="mapshow" v-show="showmap"></div>
+
 <div id="datashow" v-show="showdata">
 <table class="tablehead">
                 <tr>
@@ -409,12 +439,13 @@ th, td {
 <div id="back" v-on:click="window.location.href ='/'" >
 </div> 
 
-<div id="chart" v-on:click="showdata = false;showorder = false;showchart = true" >Chart</div> 
+<div id="chart" v-on:click="showdata = false; showmap = false; showorder = false;showchart = true" >Chart</div> 
 
-<div id="data" v-on:click="showchart = false; showorder = false; showdata = true;socket.emit('waterdata',mid)" >Data</div> 
+<div id="data" v-on:click="showchart = false;showmap = false; showorder = false; showdata = true;socket.emit('waterdata',mid)" >Data</div> 
 
-<div id="order" v-on:click="showchart = false; showdata = false; showorder = true;socket.emit('orders','')" >Order</div> 
+<div id="order" v-on:click="showchart = false; showmap = false;showdata = false; showorder = true;socket.emit('orders','')" >Order</div> 
 
+<div id="map" v-on:click="showchart = false; showdata = false; showorder = false; showmap = true;socket.emit('loadmapinfo',mid)">Map</div> 
 
 
 <div id="infov">
@@ -441,7 +472,7 @@ var mid=url.substring(url.lastIndexOf("/")+1,url.length);
                 el: '#fullpage',
                 data: {MID:"",TIME:"",WTYPE:"",WNUM:"",
 U1:"",U2:"",U3:"",U4:"",U5:"",U6:"",R1:"",R2:"",R3:"",R4:"",R5:"",R6:"",COLD:"",HOT:"",S1:"",S2:"",S3:"",S4:"",showclod:"",showhot:"",
-        zoom: 'scale(' + zoomscale +')',showhelp:false,svgheight:150,showchart:true,showdata:false,showorder:false,items: [],orders:[],sum_CD:0,sum_AK:0,sum_HT:0,sum_SP:0,sum_save:0  
+        zoom: 'scale(' + zoomscale +')',showhelp:false,svgheight:150,showchart:true,showmap:false,showdata:false,showorder:false,items: [],orders:[],sum_CD:0,sum_AK:0,sum_HT:0,sum_SP:0,sum_save:0  
         },
         created: function(){
              socket.emit("loadmachine",mid);
@@ -554,8 +585,6 @@ app.orders = msg;
     });
 
     socket.on('waterinfo', function(msg){
-    
-
      app.showclod = Math.floor((parseInt(app.COLD) + 5)   *   330/35);
      app.showhot =  Math.floor((parseInt(app.HOT)-50) * 330/50);
                   
@@ -573,8 +602,30 @@ app.orders = msg;
                       document.getElementById("svg4white").setAttribute("height", v4);
                       document.getElementById("svg5white").setAttribute("height", v5);
                       document.getElementById("svg6white").setAttribute("height", v6);
-       
     })
+
+    socket.on('mapinfo',function(msg){
+    
+                          for (var point in msg)
+                          {
+
+                            if(msg[point].MID == mid)
+                            {
+                              var la = parseFloat( msg[point].la);
+                              var ln = parseFloat( msg[point].ln);
+                              var info = msg[point].info;
+                              var dsid = msg[point].MID;
+                              setTimeout(function() {
+      map = new AMap.Map('mapshow', {
+       center: new AMap.LngLat(ln,la),
+       zoom:11
+});
+var marker = new AMap.Marker({position: new AMap.LngLat(ln,la), title: dsid + "\n" + info});
+map.add(marker);
+                              });
+                            }             
+                          }
+                    });
 </script>
 
 
